@@ -66,7 +66,7 @@ DockDrive::DockDrive() :
   , min_abs_v(0.01)
   , min_abs_w(0.1)
   , signal_window(20)
-  , ROBOT_STATE_STR(13)
+  , ROBOT_STATE_STR(14)
 {
   // Debug messages
   ROBOT_STATE_STR[0] = "IDLE";
@@ -82,6 +82,7 @@ DockDrive::DockDrive() :
   ROBOT_STATE_STR[10] = "ALIGNED_NEAR";
   ROBOT_STATE_STR[11] = "UNKNOWN";
   ROBOT_STATE_STR[12] = "LOST";
+  ROBOT_STATE_STR[13] = "SCAN_ALIGN";
 }
 
 DockDrive::~DockDrive(){;}
@@ -266,6 +267,9 @@ void DockDrive::updateVelocity(const std::vector<unsigned char>& signal_filt, co
       break;
     case RobotDockingState::BUMPED:
       bumped(new_state, new_vx, new_wz, bump_remainder);
+      break;
+    case RobotDockingState::SCAN_ALIGN:
+      scan_align(new_state, new_vx, new_wz, signal_filt);
       break;
     default:
       oss << "Wrong state : " << current_state;

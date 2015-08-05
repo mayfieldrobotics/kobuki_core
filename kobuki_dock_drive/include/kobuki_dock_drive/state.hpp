@@ -75,7 +75,8 @@ namespace kobuki {
       ALIGNED_FAR,
       ALIGNED_NEAR,
       UNKNOWN,
-      LOST
+      LOST,
+      SCAN_ALIGN
     };
 
   };
