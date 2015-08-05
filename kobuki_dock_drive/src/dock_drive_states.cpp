@@ -236,7 +236,7 @@ namespace kobuki {
       {
         next_state = RobotDockingState::GET_STREAM;
         next_vx = 0.05;
-        next_wz = 8.0*(1.0 - std::min(((double)dock_detector, 160.0)/160.0);
+        next_wz = 8.0*(1.0 - std::min((double)dock_detector, 160.0)/160.0);
       }
       else {
         next_state = RobotDockingState::FIND_STREAM;
