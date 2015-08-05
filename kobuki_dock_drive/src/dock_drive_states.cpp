@@ -212,10 +212,16 @@ namespace kobuki {
         next_state = RobotDockingState::GET_STREAM;
         next_vx = 0.05;
 
-      	// slight hack: smaller dock_detector values indicate robot is farther away from dock so
-      	// needs greater angle correction, should probably test around some more to find what
-        // function would work best for this
-        next_wz = 8.0*(1.0 - (double)dock_detector/160.0);
+      	// Hack: When the robot is farther away from the dock and tries to center itself, it tends to
+      	// move away from the dock, so this rotates the robot in order to correct the angle it moves in.
+      	// Greater angle correction is needed the farther away the robot is from the dock so the angular
+      	// velocity is higher when the value of dock_detector is lower.
+      	// dock_detector values indicate how far away the robot is from the dock, higher values indicate
+      	// it is closer to the dock and lower values indicate it is farther away from the dock. Values
+      	// seem to range from around 20 to 150-ish; they are negative if the dock is to the left of the
+      	// robot and positive if the dock is to the right.
+      	// 8.0 is just a randomly chosen gain that seemed to work rather well.
+        next_wz = 8.0*(1.0 - std::min((double)dock_detector, 160.0)/160.0);
       }
       else {
         next_state = RobotDockingState::FIND_STREAM;
@@ -230,7 +236,7 @@ namespace kobuki {
       {
         next_state = RobotDockingState::GET_STREAM;
         next_vx = 0.05;
-        next_wz = 8.0*(1.0 - (double)dock_detector/160.0);
+        next_wz = 8.0*(1.0 - std::min(((double)dock_detector, 160.0)/160.0);
       }
       else {
         next_state = RobotDockingState::FIND_STREAM;
